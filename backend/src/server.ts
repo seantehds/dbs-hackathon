@@ -1,5 +1,5 @@
 import app from "./app";
-import { Response } from "express";
+import { Response, Request } from "express";
 
 const PORT = process.env.PORT || 3000;
 
@@ -10,6 +10,11 @@ app.get("/api/test", (_req, res: Response) => {
   console.log("test called")
   res.json({ api: "works hooray" });
 });
+
+// EXPENSES
+app.get('/api/expenses/:userId', (req: Request, res: Response) => {
+    console.log("expenses endpoint called")
+})
 
 // -------- START SERVER --------
 
