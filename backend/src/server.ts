@@ -17,7 +17,11 @@ app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
 });
 
+// Landing Page APIs
 
+app.get("/api/groups/:userID", (_req, res: Response) => {
+  res.json({ groups: [] });
+}
 // -------- API ROUTES --------
 
 import express, { Request, Response } from 'express';
