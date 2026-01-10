@@ -117,7 +117,7 @@ app.get("/api/expenses/:userId", async (req: Request, res: Response) => {
   const expensesDocuments = await expensesCollection
     .find({ $or: [{ paidBy: userId }, { paidTo: userId }] })
     .toArray();
-  res.json({ documents: expensesDocuments });
+  res.json({ expenses: expensesDocuments });
 });
 
 // Create
@@ -161,5 +161,5 @@ app.post("/api/groups", async (req: Request, res: Response) => {
     description: description,
   });
 
-  res.json({ done: response.insertedId });
+  res.json({ insertedId: response.insertedId });
 });
