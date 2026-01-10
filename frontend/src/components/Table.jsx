@@ -2,8 +2,9 @@ import React from 'react';
 import { useTable, useSortBy, useGlobalFilter, useAsyncDebounce, usePagination } from 'react-table';
 import 'regenerator-runtime/runtime';
 
-import { ChevronDoubleLeftIcon, ChevronLeftIcon, ChevronRightIcon, ChevronDoubleRightIcon } from '@heroicons/react/solid'
-import { Button, PageButton } from './shared/Button'
+import { ChevronDoubleLeftIcon, ChevronLeftIcon, ChevronRightIcon, ChevronDoubleRightIcon } from '@heroicons/react/24/solid'
+
+import { Button, PageButton } from './Button'
 
 
 function GlobalFilter({
@@ -137,7 +138,29 @@ function Table({ columns, data }) {
       </div>
       {/* table */}
       <div className="mt-2 flex flex-col">
-        ...
+        <table {...getTableProps()} border="1">
+        <thead>
+          {headerGroups.map((headerGroup) => (
+            <tr {...headerGroup.getHeaderGroupProps()}>
+              {headerGroup.headers.map((column) => (
+                <th {...column.getHeaderProps()}>{column.render("Header")}</th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+        <tbody {...getTableBodyProps()}>
+          {page.map((row, i) => {
+            prepareRow(row);
+            return (
+              <tr {...row.getRowProps()}>
+                {row.cells.map((cell) => {
+                  return <td {...cell.getCellProps()}>{cell.render("Cell")}</td>;
+                })}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
       </div>
       {/* Pagination */}
       <div className="py-3 flex items-center justify-between">
