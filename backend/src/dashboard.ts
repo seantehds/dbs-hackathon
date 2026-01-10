@@ -24,7 +24,7 @@ export const getDashboard = async (req: Request, res: Response, client: MongoCli
         name: group.name,
         description: group.description,
         category: group.category,
-        currency: group.currency || 'USD',
+        currency: group.currency || 'SGD',
         memberCount: memberIds.length,
         members: memberDetails.map((member: any) => ({
           _id: member._id,
