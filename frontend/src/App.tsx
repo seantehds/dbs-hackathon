@@ -1,10 +1,10 @@
 import './App.css'
 import { useState } from 'react';
-import Table from './components/Table'
+// import Table from './components/Table'
 import React from 'react';
 import { BrowserRouter, Route, Routes, Link } from 'react-router-dom'
-import Header from './components/Header'
-import Footer from './components/Footer'
+// import Header from './components/Header'
+// import Footer from './components/Footer'
 
 const outstandingAmount = [
 
@@ -71,7 +71,40 @@ function App() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      fetch("http://localhost:5050/")
+      const res = await fetch("http://localhost:5050/api/login", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email, password
+        })
+      })
+      if (res.status === 200) {
+        window.location.href = "http://localhost:5173/"
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  const handleRegister = async (e) => {
+    e.preventDefault()
+    try {
+      const res = await fetch("http://localhost:5050/api/register", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email, password
+        })
+      })
+      if (res.status === 201) {
+        window.location.href = "http://localhost:5173/login"
+      }
+    } catch (err) {
+      console.log(err)
     }
   }
 
@@ -79,7 +112,7 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Header />
+      {/* <Header /> */}
       <Routes>
         <Route path='/' element={
           <>
@@ -123,7 +156,7 @@ function App() {
                     setPassword(e.target.value)
                   }
                 } />
-                <button type="submit">Login</button>
+                <button type="submit" onClick={handleLogin}>Login</button>
               </form>
               <Link to="/register">Register</Link>
             </div>
@@ -145,9 +178,16 @@ function App() {
                 alignItems: "center",
                 justifyContent: "center",
               }}>
-                <input type="text" id="email" placeholder="Email" />
-                <input type="text" id="password" placeholder="Password" />
-                <button type="submit" >Register</button>
+                <input type="text" id="email" placeholder="Email" onChange={
+                  e => {
+                    setEmail(e.target.value)
+                  }} />
+                <input type="text" id="password" placeholder="Password" onChange={
+                  e => {
+                    setPassword(e.target.value)
+                  }
+                } />
+                <button type="submit" onClick={handleRegister}>Register</button>
               </form>
               <Link to="/login">Back</Link>
             </div>
@@ -156,7 +196,7 @@ function App() {
         />
       </Routes>
 
-      <Footer />
+      {/* <Footer /> */}
     </BrowserRouter>
   );
 }
