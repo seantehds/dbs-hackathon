@@ -34,14 +34,14 @@ app.get("/api/expenses/:userId", (req: Request, res: Response) => {
   console.log("expenses endpoint called");
 });
 
-// GROUPS
-app.get("/api/groups/:userId", (req: Request, res: Response) => {
-  try {
-          const users = await app.User.find();
-          res.json(users);
-      } catch (err) {
-          res.status(500).send('Error retrieving users');
-      }
+// GROUPS get user's groups based on userId
+app.get("/api/groups/:userId", async (req: Request, res: Response) => {
+  console.log("get user's groups");
+  await client.connect();
+  const database = await client.db("dbs_database")
+  const groups = database.collection("groups")
+  const userGroups = await groups.find({ members: req.params.userId }).toArray();
+  res.json({ groups: userGroups });
 });
 
 // Create group
