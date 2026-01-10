@@ -12,6 +12,10 @@ app.get("/api/test", (_req, res: Response) => {
 });
 
 // USERS
+app.get("/api/users", (_req, res: Response) => {
+  console.log("get all users");
+  res.json({ users: [1234] });
+});
 
 // EXPENSES
 app.get("/api/expenses/:userId", (req: Request, res: Response) => {
@@ -24,6 +28,7 @@ app.get("/api/groups/:userId", (req: Request, res: Response) => {
   res.json({ groups: {}, summary: {} });
 });
 
+// Create group
 app.post("/api/groups", (req: Request, res: Response) => {});
 
 // -------- START SERVER --------
