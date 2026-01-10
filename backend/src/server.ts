@@ -21,7 +21,7 @@ app.get("/api/expenses/:userId", (req: Request, res: Response) => {
 // GROUPS
 app.get("/api/groups/:userId", (req: Request, res: Response) => {
   console.log("login successful");
-  res.json({ groups: [] });
+  res.json({ groups: {}, summary: {} });
 });
 
 app.post("/api/groups", (req: Request, res: Response) => {});
