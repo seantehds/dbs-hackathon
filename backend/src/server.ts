@@ -16,13 +16,13 @@ app.get('/api/expenses/:userId', (req: Request, res: Response) => {
     console.log("expenses endpoint called")
 })
 
-// -------- START SERVER --------
 
 // Landing Page
 app.get("/api/groups/:userID", (_req, res: Response) => {
-  res.json({ groups: [] });
+    res.json({ groups: [] });
 })
 
+// -------- START SERVER --------
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
 });
