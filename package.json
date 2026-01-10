@@ -13,6 +13,11 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "mongoose": "^8.21.0"
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@mui/material": "^7.3.7",
+    "@tanstack/react-table": "^8.21.3",
+    "mongoose": "^8.21.0",
+    "react-table": "^7.8.0"
   }
 }
