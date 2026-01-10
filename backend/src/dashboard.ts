@@ -1,71 +1,51 @@
-import { Express, Request, Response } from 'express';
+import { Request, Response } from 'express';
+import { MongoClient } from 'mongodb';
 
-export function setupDashboardAPI(app: Express) {
+export const getDashboard = async (req: Request, res: Response, client: MongoClient) => {
+  console.log("get dashboard data");
+  await client.connect();
+  const database = client.db("dbs_database");
+  const groups = database.collection("groups");
+  const users = database.collection("users");
   
-  // COMBINED ENDPOINT: Dashboard Data
-  // Returns groups data that frontend can use for both 2.1 and 2.2
-
-  // Frontend Usage:
-  // - Calculate 2.1 (Balance Summary) by summing totalSettled and totalPending across all groups
-  // - Display 2.2 (Groups List) directly from the groups array
-
-  app.get('/api/dashboard', async (req, res: Response) => {
-    try {
-      // Get userId from request (adjust based on your auth implementation)
-      const userId = req.userId || req.headers['x-user-id'] as string;
-
-      if (!userId) {
-        return res.status(401).json({
-          success: false,
-          message: 'Unauthorized: User ID not found'
-        });
-      }
-
-      // Find all active groups where user is a member
-      const groups = await Group.find({
-        members: userId,
-        isActive: true
-      })
-        .populate('members', 'name email') // Populate member details for display
-        .sort({ lastActivity: -1 }) // Sort by most recent activity first
-        .lean()
-        .exec();
-
-      // Format groups data with all necessary information
-      const groupsData = groups.map((group: any) => ({
-        _id: group._id.toString(),
+  // Find all groups where user is a member
+  const userGroups = await groups.find({ members: req.params.userId }).toArray();
+  
+  // Get member details for each group
+  const groupsWithDetails = await Promise.all(
+    userGroups.map(async (group: any) => {
+      // Get all member details
+      const memberIds = group.members || [];
+      const memberDetails = await users.find({ 
+        _id: { $in: memberIds } 
+      }).toArray();
+      
+      return {
+        _id: group._id,
         name: group.name,
         description: group.description,
         category: group.category,
-        currency: group.currency,
-        memberCount: group.members.length,
-        members: group.members.map((member: any) => ({
-          _id: member._id.toString(),
+        currency: group.currency || 'USD',
+        memberCount: memberIds.length,
+        members: memberDetails.map((member: any) => ({
+          _id: member._id,
           name: member.name,
           email: member.email
         })),
         totalSettled: group.totalSettled || 0,
         totalPending: group.totalPending || 0,
-        lastActivity: group.lastActivity,
-        createdAt: group.createdAt
-      }));
-
-      // Return groups data - frontend will calculate summary from this
-      return res.status(200).json({
-        success: true,
-        data: {
-          groups: groupsData,
-          totalGroups: groupsData.length
-        }
-      });
-
-    } catch (error) {
-      console.error('Error fetching dashboard data:', error);
-      return res.status(500).json({
-        success: false,
-        message: 'Failed to fetch dashboard data',
-        error: error instanceof Error ? error.message : 'Unknown error'
-      });
-    }
+        lastActivity: group.lastActivity || group.updatedAt || group.createdAt
+      };
+    })
+  );
+  
+  // Sort by most recent activity
+  groupsWithDetails.sort((a, b) => {
+    return new Date(b.lastActivity).getTime() - new Date(a.lastActivity).getTime();
   });
-}
+  
+  res.json({ 
+    groups: groupsWithDetails,
+    totalGroups: groupsWithDetails.length
+  });
+};
