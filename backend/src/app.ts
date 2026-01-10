@@ -10,7 +10,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect('mongodb://localhost:27017/mydb', {
+/*mongoose.connect('mongodb://localhost:27017/mydb', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
@@ -21,6 +21,6 @@ const userSchema = new mongoose.Schema({
     password: String
 });
 
-const User = mongoose.model('User', userSchema);
+//const User = mongoose.model('User', userSchema);*/
 
 export default app;
