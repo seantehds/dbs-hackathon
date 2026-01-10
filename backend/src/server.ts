@@ -4,6 +4,7 @@ import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { Db } from "mongodb";
+import { getDashboard } from "./dashboard";
 
 const PORT = process.env.PORT || 3000;
 let database: Db;
@@ -114,14 +115,7 @@ app.get("/api/expenses/:userId", (req: Request, res: Response) => {
 
 // GROUPS get user's groups based on userId
 app.get("/api/groups/:userId", async (req: Request, res: Response) => {
-  console.log("get user's groups");
-  // await client.connect();
-  const database = await client.db("dbs_database");
-  const groups = database.collection("groups");
-  const userGroups = await groups
-    .find({ members: req.params.userId })
-    .toArray();
-  res.json({ groups: userGroups });
+  await getDashboard(req, res, client)
 });
 
 // Create group
