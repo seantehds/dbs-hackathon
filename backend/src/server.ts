@@ -84,15 +84,12 @@ app.get("/api/expenses/:userId", (req: Request, res: Response) => {
 
 // GROUPS
 app.get("/api/groups/:userId", (req: Request, res: Response) => {
-    try {
-        const groups = await app.findById(req.params.id);
-        if (groups == null) {
-            return res.status(404).json({ message: 'No groups found' });
-        }
-        res.json(groups);
-    } catch (error: any) {
-        return res.status(500).json({ message: error.message });
-    }
+  try {
+          const users = await app.User.find();
+          res.json(users);
+      } catch (err) {
+          res.status(500).send('Error retrieving users');
+      }
 });
 
 // Create group
