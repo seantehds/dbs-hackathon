@@ -114,18 +114,12 @@ app.get("/api/expenses/:userId", (req: Request, res: Response) => {
 // GROUPS get user's groups based on userId
 app.get("/api/groups/:userId", async (req: Request, res: Response) => {
   console.log("get user's groups");
-<<<<<<< HEAD
-  const database = await client.db("dbs_database")
-  const groups = database.collection("groups")
-  const userGroups = await groups.find({ members: req.params.userId }).toArray();
-=======
-  await client.connect();
+  // await client.connect();
   const database = await client.db("dbs_database");
   const groups = database.collection("groups");
   const userGroups = await groups
     .find({ members: req.params.userId })
     .toArray();
->>>>>>> 9ef112d890ce25fdbbb7c927407b1e0846a25c13
   res.json({ groups: userGroups });
 });
 
