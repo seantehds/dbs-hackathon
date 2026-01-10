@@ -1,4 +1,5 @@
 import './App.css'
+import { useState } from 'react';
 import Table from './components/Table'
 import React from 'react';
 import { BrowserRouter, Route, Routes, Link } from 'react-router-dom'
@@ -50,6 +51,8 @@ const getData = () => [
 ];
 
 function App() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const columns = React.useMemo(
     () => [
       {
@@ -64,6 +67,13 @@ function App() {
     ],
     []
   );
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      fetch("http://localhost:5050/")
+    }
+  }
 
   const data = React.useMemo(() => getData(), []);
 
@@ -91,12 +101,29 @@ function App() {
         />
         <Route path='/login' element={
           <>
-            <div>
-              <h1>Login</h1>
-              <form>
-                <input type="text" id="username" placeholder="Username" />
-                <input type="text" id="password" placeholder="Password" />
-                <button type="submit" >Login</button>
+            <div style={{
+              border: "solid",
+              borderRadius: "10px",
+              padding: "0px 32px 24px"
+            }}>
+              <h2>Login</h2>
+              <form style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "16px",
+                alignItems: "center",
+                justifyContent: "center",
+              }}>
+                <input type="text" id="email" placeholder="Email" onChange={
+                  e => {
+                    setEmail(e.target.value)
+                  }} />
+                <input type="text" id="password" placeholder="Password" onChange={
+                  e => {
+                    setPassword(e.target.value)
+                  }
+                } />
+                <button type="submit">Login</button>
               </form>
               <Link to="/register">Register</Link>
             </div>
@@ -105,10 +132,20 @@ function App() {
         />
         <Route path='/register' element={
           <>
-            <div>
-              <h1>Register</h1>
-              <form>
-                <input type="text" id="username" placeholder="Username" />
+            <div style={{
+              border: "solid",
+              borderRadius: "10px",
+              padding: "0px 32px 24px"
+            }}>
+              <h2>Register</h2>
+              <form style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "16px",
+                alignItems: "center",
+                justifyContent: "center",
+              }}>
+                <input type="text" id="email" placeholder="Email" />
                 <input type="text" id="password" placeholder="Password" />
                 <button type="submit" >Register</button>
               </form>
