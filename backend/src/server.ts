@@ -4,6 +4,7 @@ import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { Db } from "mongodb";
+import { getDashboard } from "./dashboard";
 
 const PORT = process.env.PORT || 3000;
 let database: Db;
@@ -30,9 +31,10 @@ app.get("/api/test", (_req, res: Response) => {
 });
 
 // USERS
-app.get("/api/users", (_req, res: Response) => {
-  console.log("get all users");
-  res.json({ users: [1234] });
+app.get("/api/users", async (_req, res: Response) => {
+  const usersCollection = database.collection("users")
+  const usersDocuments = await usersCollection.find().toArray()
+  res.json({ users: usersDocuments});
 });
 
 // LOGIN
@@ -114,22 +116,25 @@ app.get("/api/expenses/:userId", (req: Request, res: Response) => {
 
 // GROUPS get user's groups based on userId
 app.get("/api/groups/:userId", async (req: Request, res: Response) => {
-  console.log("get user's groups");
-  // await client.connect();
-  const database = await client.db("dbs_database");
-  const groups = database.collection("groups");
-  const userGroups = await groups
-    .find({ members: req.params.userId })
-    .toArray();
-  res.json({ groups: userGroups });
+  console.log("get user groups");
+  await getDashboard(req, res, client)
 });
 
 // Create group
 app.post("/api/groups", async (req: Request, res: Response) => {
+  const name = req.query.name;
+  const currency = req.query.currency;
+  const category = req.query.category;
+  const description = req.query.description;
+  const members = (req.query.members as string).split(",");
   const groups = database.collection("groups");
-  console.log(groups.db)
   const response = await groups.insertOne({
-    test: "test"
-  })
-  console.log(response)
+    name: name,
+    members: members,
+    currency: currency,
+    category: category,
+    description: description,
+  });
+
+  res.json({ done: response.insertedId });
 });
