@@ -117,6 +117,7 @@ function App() {
         <Route path='/' element={
           <>
             {/* <div>Home</div> */}
+            <h3>Hi user! You owe a total of $815</h3>
             <Table columns={columns} data={data} />
           </>
         }
