@@ -3,7 +3,6 @@ import { MongoClient } from 'mongodb';
 
 export const getDashboard = async (req: Request, res: Response, client: MongoClient) => {
   console.log("get dashboard data");
-  await client.connect();
   const database = client.db("dbs_database");
   const groups = database.collection("groups");
   const users = database.collection("users");
