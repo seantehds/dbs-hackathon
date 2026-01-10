@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import app from "./app";
 import { Response } from "express";
 import dotenv from "dotenv";
+import { setupDashboardAPI } from './dashboard-api';
 
 dotenv.config();
 const PORT = process.env.PORT || 3000;
