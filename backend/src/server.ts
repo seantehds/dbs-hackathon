@@ -16,6 +16,3 @@ app.get("/api/test", (_req, res: Response) => {
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
 });
-
-
-// -------- API ROUTES --------
