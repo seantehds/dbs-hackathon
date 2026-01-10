@@ -37,9 +37,36 @@ app.get("/api/users", async (_req, res: Response) => {
 });
 
 // LOGIN
-app.post("/api/login", (req: Request, res: Response) => {
-  console.log("login successful");
-  res.json({ userId: "1234" });
+app.post("/api/login", async (req: Request, res: Response) => {
+  try {
+    const { email, password } = req.body;
+    console.log(req.body);
+
+    const usersCollection = database.collection('users');
+
+    const user = await usersCollection.findOne({ email });
+    if (!user) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+
+    const token = jwt.sign(
+      { userId: user._id, email: user.email },
+      JWT_SECRET,
+      { expiresIn: '24h' }
+    );
+
+    res.status(200).json({
+      token,
+      user: { id: user._id, email: user.email }
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Error logging in", error });
+  }
 });
 
 // REGISTER
@@ -88,7 +115,7 @@ app.get("/api/expenses/:userId", (req: Request, res: Response) => {
 // GROUPS get user's groups based on userId
 app.get("/api/groups/:userId", async (req: Request, res: Response) => {
   console.log("get user's groups");
-  await client.connect();
+  // await client.connect();
   const database = await client.db("dbs_database");
   const groups = database.collection("groups");
   const userGroups = await groups
