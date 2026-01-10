@@ -1,6 +1,6 @@
 import React from 'react';
-import { useTable, useSortBy, useGlobalFilter, useAsyncDebounce, usePagination } from 'react-table';
-import 'regenerator-runtime/runtime';
+// import { useTable, useSortBy, useGlobalFilter, useAsyncDebounce, usePagination } from 'react-table';
+// import 'regenerator-runtime/runtime';
 
 import { ChevronDoubleLeftIcon, ChevronLeftIcon, ChevronRightIcon, ChevronDoubleRightIcon } from '@heroicons/react/24/solid'
 
@@ -37,25 +37,25 @@ function GlobalFilter({
 function Table({ columns, data }) {
   // Use the state and functions returned from useTable to build your UI
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow,
-          state, preGlobalFilteredRows, setGlobalFilter,
-          page,
-          canPreviousPage,
-          canNextPage,
-          pageOptions,
-          pageCount,
-          gotoPage,
-          nextPage,
-          previousPage,
-          setPageSize,
-   } =
+    state, preGlobalFilteredRows, setGlobalFilter,
+    page,
+    canPreviousPage,
+    canNextPage,
+    pageOptions,
+    pageCount,
+    gotoPage,
+    nextPage,
+    previousPage,
+    setPageSize,
+  } =
 
     useTable({
       columns,
       data,
     },
-    useGlobalFilter,
-    useSortBy,
-    usePagination,
+      useGlobalFilter,
+      useSortBy,
+      usePagination,
     );
 
   // Render the UI for your table
@@ -130,10 +130,10 @@ function Table({ columns, data }) {
         />
         {headerGroups.map((headerGroup) =>
           <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                <th {...column.getHeaderProps()}>{column.render("Header")}</th>
-              ))}
-            </tr>
+            {headerGroup.headers.map((column) => (
+              <th {...column.getHeaderProps()}>{column.render("Header")}</th>
+            ))}
+          </tr>
         )}
       </div>
       {/* table */}

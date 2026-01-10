@@ -11,5 +11,8 @@
   "devDependencies": {
     "concurrently": "^9.2.1",
     "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "mongoose": "^8.21.0"
   }
 }
