@@ -72,6 +72,7 @@ app.post("/api/login", async (req: Request, res: Response) => {
 app.post("/api/register", async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
+    console.log(req.body)
 
     if (!email || !password) {
       return res
