@@ -1,5 +1,6 @@
 import app from "./app";
 import { Response, Request } from "express";
+import client from "./db/connection";
 
 const PORT = process.env.PORT || 3000;
 
@@ -26,7 +27,7 @@ app.post("/api/login", (req: Request, res: Response) => {
 app.post("/api/register", (req: Request, res: Response) => {
   console.log("register successful");
   res.json({ userId: "1234" });
-}); 
+});
 
 // EXPENSES
 app.get("/api/expenses/:userId", (req: Request, res: Response) => {
@@ -44,9 +45,16 @@ app.get("/api/groups/:userId", (req: Request, res: Response) => {
 });
 
 // Create group
-app.post("/api/groups", (req: Request, res: Response) => {});
+app.post("/api/groups", (req: Request, res: Response) => { });
 
 // -------- START SERVER --------
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
+  await client.connect();
+  const database = await client.db("dbs_database")
+  const colls = database.listCollections();
+  for await (const doc of colls) {
+    console.log(doc)
+  }
+  console.log("connected")
 });
