@@ -36,7 +36,10 @@ app.get("/api/expenses/:userId", (req: Request, res: Response) => {
 // GROUPS
 app.get("/api/groups/:userId", (req: Request, res: Response) => {
   console.log("login successful");
-  res.json({ groups: {}, summary: {} });
+  const userId = req.params.userId;
+  res.json({ groups: [`group1 for user ${userId}`, `group2 for user ${userId}`] });
+    
+
 });
 
 // Create group
