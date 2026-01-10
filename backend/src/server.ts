@@ -36,8 +36,15 @@ app.get("/api/expenses/:userId", (req: Request, res: Response) => {
 
 // GROUPS
 app.get("/api/groups/:userId", (req: Request, res: Response) => {
-  console.log("login successful");
-  res.json({ groups: {}, summary: {} });
+    try {
+        const groups = await app.findById(req.params.id);
+        if (groups == null) {
+            return res.status(404).json({ message: 'No groups found' });
+        }
+        res.json(groups);
+    } catch (error: any) {
+        return res.status(500).json({ message: error.message });
+    }
 });
 
 // Create group
