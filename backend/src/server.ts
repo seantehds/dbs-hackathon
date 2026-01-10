@@ -1,25 +1,24 @@
 import app from "./app";
 import client from "./db/connection";
-import express, { Request, Response } from 'express';
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-import { Db, ObjectId } from 'mongodb';
+import { Request, Response } from "express";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import { Db } from "mongodb";
 
 const PORT = process.env.PORT || 3000;
 let database: Db;
-const JWT_SECRET = process.env.JWT_SECRET || 'jwt_secret_key';
-
+const JWT_SECRET = process.env.JWT_SECRET || "jwt_secret_key";
 
 // -------- START SERVER --------
 app.listen(PORT, async () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
   await client.connect();
-  database = await client.db("dbs_database")
+  database = await client.db("dbs_database");
   const colls = database.listCollections();
   for await (const doc of colls) {
-    console.log(doc)
+    console.log(doc);
   }
-  console.log("connected")
+  console.log("connected");
 });
 
 // -------- API ROUTES --------
@@ -75,10 +74,12 @@ app.post("/api/register", async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res.status(400).json({ message: "Email and password are required" });
+      return res
+        .status(400)
+        .json({ message: "Email and password are required" });
     }
 
-    const usersCollection = database.collection('users');
+    const usersCollection = database.collection("users");
 
     const existingUser = await usersCollection.findOne({ email });
     if (existingUser) {
@@ -91,15 +92,13 @@ app.post("/api/register", async (req: Request, res: Response) => {
     // insert user
     const result = await usersCollection.insertOne({
       email,
-      passwordHash: hashedPassword
+      passwordHash: hashedPassword,
     });
 
     // generate JWT
-    const token = jwt.sign(
-      { userId: result.insertedId, email },
-      JWT_SECRET,
-      { expiresIn: '24h' }
-    );
+    const token = jwt.sign({ userId: result.insertedId, email }, JWT_SECRET, {
+      expiresIn: "24h",
+    });
 
     res.status(201).json({ token, userId: result.insertedId });
   } catch (error) {
@@ -112,15 +111,24 @@ app.get("/api/expenses/:userId", (req: Request, res: Response) => {
   console.log("expenses endpoint called");
 });
 
-// GROUPS
-/*app.get("/api/groups/:userId", async (req: Request, res: Response) => {
-  try {
-          const users = await app.User.find();
-          res.json(users);
-      } catch (err) {
-          res.status(500).send('Error retrieving users');
-      }
-});*/
+// GROUPS get user's groups based on userId
+app.get("/api/groups/:userId", async (req: Request, res: Response) => {
+  console.log("get user's groups");
+  await client.connect();
+  const database = await client.db("dbs_database");
+  const groups = database.collection("groups");
+  const userGroups = await groups
+    .find({ members: req.params.userId })
+    .toArray();
+  res.json({ groups: userGroups });
+});
 
 // Create group
-app.post("/api/groups", (req: Request, res: Response) => { });
+app.post("/api/groups", async (req: Request, res: Response) => {
+  const groups = database.collection("groups");
+  console.log(groups.db)
+  const response = await groups.insertOne({
+    test: "test"
+  })
+  console.log(response)
+});
