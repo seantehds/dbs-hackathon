@@ -1,8 +1,6 @@
 import app from "./app";
-import { Response } from "express";
-import dotenv from "dotenv";
+import { Response, Request } from "express";
 
-dotenv.config();
 const PORT = process.env.PORT || 3000;
 
 // -------- API ROUTES --------
@@ -13,11 +11,18 @@ app.get("/api/test", (_req, res: Response) => {
   res.json({ api: "works hooray" });
 });
 
-// -------- START SERVER --------
+// EXPENSES
+app.get('/api/expenses/:userId', (req: Request, res: Response) => {
+  console.log("expenses endpoint called")
+})
 
-app.listen(PORT, async () => {
+
+// Landing Page
+app.get("/api/groups/:userID", (_req, res: Response) => {
+  res.json({ groups: [] });
+})
+
+// -------- START SERVER --------
+app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
 });
-
-
-// -------- API ROUTES --------
