@@ -31,9 +31,9 @@ app.get("/api/test", (_req, res: Response) => {
 
 // USERS
 app.get("/api/users", async (_req, res: Response) => {
-  const usersCollection = database.collection("users")
-  const usersDocuments = await usersCollection.find().toArray()
-  res.json({ users: usersDocuments});
+  const usersCollection = database.collection("users");
+  const usersDocuments = await usersCollection.find().toArray();
+  res.json({ users: usersDocuments });
 });
 
 // LOGIN
@@ -42,7 +42,7 @@ app.post("/api/login", async (req: Request, res: Response) => {
     const { email, password } = req.body;
     console.log(req.body);
 
-    const usersCollection = database.collection('users');
+    const usersCollection = database.collection("users");
 
     const user = await usersCollection.findOne({ email });
     if (!user) {
@@ -57,12 +57,12 @@ app.post("/api/login", async (req: Request, res: Response) => {
     const token = jwt.sign(
       { userId: user._id, email: user.email },
       JWT_SECRET,
-      { expiresIn: '24h' }
+      { expiresIn: "24h" }
     );
 
     res.status(200).json({
       token,
-      user: { id: user._id, email: user.email }
+      user: { id: user._id, email: user.email },
     });
   } catch (error) {
     res.status(500).json({ message: "Error logging in", error });
@@ -108,8 +108,13 @@ app.post("/api/register", async (req: Request, res: Response) => {
 });
 
 // EXPENSES
-app.get("/api/expenses/:userId", (req: Request, res: Response) => {
-  console.log("expenses endpoint called");
+app.get("/api/expenses/:userId", async (req: Request, res: Response) => {
+  const userId = req.params.userId;
+  const expensesCollection = database.collection("expenses");
+  const expensesDocuments = await expensesCollection
+    .find({ $or: [{ paidBy: userId }, { paidTo: userId }] })
+    .toArray();
+  res.json({documents: expensesDocuments});
 });
 
 // GROUPS get user's groups based on userId
@@ -131,8 +136,8 @@ app.post("/api/groups", async (req: Request, res: Response) => {
   const category = req.query.category;
   const description = req.query.description;
   const members = (req.query.members as string).split(",");
-  const groups = database.collection("groups");
-  const response = await groups.insertOne({
+  const groupsCollection = database.collection("groups");
+  const response = await groupsCollection.insertOne({
     name: name,
     members: members,
     currency: currency,
