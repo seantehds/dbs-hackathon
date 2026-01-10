@@ -87,7 +87,6 @@ app.get("/api/expenses/:userId", (req: Request, res: Response) => {
 // GROUPS get user's groups based on userId
 app.get("/api/groups/:userId", async (req: Request, res: Response) => {
   console.log("get user's groups");
-  await client.connect();
   const database = await client.db("dbs_database")
   const groups = database.collection("groups")
   const userGroups = await groups.find({ members: req.params.userId }).toArray();
