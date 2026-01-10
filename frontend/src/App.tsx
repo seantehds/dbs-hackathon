@@ -2,7 +2,7 @@ import { useState } from 'react'
 import './App.css'
 import Table from './components/Table'
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes} from 'react-router-dom'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import Header from './components/Header'
 import Footer from './components/Footer'
 
@@ -72,24 +72,41 @@ function App() {
     <>
       <h1>Hello React!</h1>
       <Table columns={columns} data={data} />
-      
-      <Router>
-      <div className="container">
-        <Header />
-        
-        <Routes>
-          <Route path='/' element= {
-            <>
-    
-            </>
-          }
-          />
-        </Routes>
-        
-        <Footer/>
-        {/*<h2>Hello {name}</h2>*/}
+
+      <div className="min-h-screen bg-gray-100 text-gray-900">
+        <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
+          <div className="">
+            <h1 className="text-xl font-semibold">Payments App</h1>
+          </div>
+          <div className="mt-4">
+            <Table columns={columns} data={data} />
+          </div>
+        </main>
       </div>
-    </Router>
+
+      <Router>
+        <div className="container">
+          <Header />
+
+          <Routes>
+            <Route path='/' element={
+              <>
+
+              </>
+            }
+            />
+            <Route path='login/' element={
+              <>
+
+              </>
+            }
+            />
+          </Routes>
+
+          <Footer />
+          {/*<h2>Hello {name}</h2>*/}
+        </div>
+      </Router>
     </>
   );
 }
