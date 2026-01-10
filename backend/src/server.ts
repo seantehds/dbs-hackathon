@@ -30,10 +30,12 @@ app.get("/api/test", (_req, res: Response) => {
 });
 
 // USERS
-app.get("/api/users", (_req, res: Response) => {
-  console.log("get all users");
-  res.json({ users: [1234] });
+app.get("/api/users", async (_req, res: Response) => {
+  const usersCollection = database.collection("users")
+  const usersDocuments = await usersCollection.find().toArray()
+  res.json({ users: usersDocuments});
 });
+
 // LOGIN
 app.post("/api/login", (req: Request, res: Response) => {
   console.log("login successful");
@@ -97,10 +99,19 @@ app.get("/api/groups/:userId", async (req: Request, res: Response) => {
 
 // Create group
 app.post("/api/groups", async (req: Request, res: Response) => {
+  const name = req.query.name;
+  const currency = req.query.currency;
+  const category = req.query.category;
+  const description = req.query.description;
+  const members = (req.query.members as string).split(",");
   const groups = database.collection("groups");
-  console.log(groups.db)
   const response = await groups.insertOne({
-    test: "test"
-  })
-  console.log(response)
+    name: name,
+    members: members,
+    currency: currency,
+    category: category,
+    description: description,
+  });
+
+  res.json({ done: response.insertedId });
 });
