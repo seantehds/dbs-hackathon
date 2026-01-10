@@ -8,20 +8,40 @@ const PORT = process.env.PORT || 3000;
 
 // test
 app.get("/api/test", (_req, res: Response) => {
-  console.log("test called")
+  console.log("test called");
   res.json({ api: "works hooray" });
 });
 
+// USERS
+app.get("/api/users", (_req, res: Response) => {
+  console.log("get all users");
+  res.json({ users: [1234] });
+});
+// LOGIN
+app.post("/api/login", (req: Request, res: Response) => {
+  console.log("login successful");
+  res.json({ userId: "1234" });
+});
+
+// REGISTER
+app.post("/api/register", (req: Request, res: Response) => {
+  console.log("register successful");
+  res.json({ userId: "1234" });
+});
+
 // EXPENSES
-app.get('/api/expenses/:userId', (req: Request, res: Response) => {
-  console.log("expenses endpoint called")
-})
+app.get("/api/expenses/:userId", (req: Request, res: Response) => {
+  console.log("expenses endpoint called");
+});
 
+// GROUPS
+app.get("/api/groups/:userId", (req: Request, res: Response) => {
+  console.log("login successful");
+  res.json({ groups: {}, summary: {} });
+});
 
-// Landing Page
-app.get("/api/groups/:userID", (_req, res: Response) => {
-  res.json({ groups: [] });
-})
+// Create group
+app.post("/api/groups", (req: Request, res: Response) => { });
 
 // -------- START SERVER --------
 app.listen(PORT, async () => {
