@@ -2,6 +2,9 @@ import { useState } from 'react'
 import './App.css'
 import Table from './components/Table'
 import React from 'react';
+import { BrowserRouter as Router, Route, Routes} from 'react-router-dom'
+import Header from './components/Header'
+import Footer from './components/Footer'
 
 const outstandingAmount = [
 
@@ -70,6 +73,23 @@ function App() {
       <h1>Hello React!</h1>
       <Table columns={columns} data={data} />
       
+      <Router>
+      <div className="container">
+        <Header />
+        
+        <Routes>
+          <Route path='/' element= {
+            <>
+    
+            </>
+          }
+          />
+        </Routes>
+        
+        <Footer/>
+        {/*<h2>Hello {name}</h2>*/}
+      </div>
+    </Router>
     </>
   );
 }
