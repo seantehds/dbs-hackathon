@@ -16,6 +16,17 @@ app.get("/api/users", (_req, res: Response) => {
   console.log("get all users");
   res.json({ users: [1234] });
 });
+// LOGIN
+app.post("/api/login", (req: Request, res: Response) => {
+  console.log("login successful");
+  res.json({ userId: "1234" });
+});
+
+// REGISTER
+app.post("/api/register", (req: Request, res: Response) => {
+  console.log("register successful");
+  res.json({ userId: "1234" });
+}); 
 
 // EXPENSES
 app.get("/api/expenses/:userId", (req: Request, res: Response) => {
