@@ -1,10 +1,10 @@
 import React from 'react';
-// import { useTable, useSortBy, useGlobalFilter, useAsyncDebounce, usePagination } from 'react-table';
-// import 'regenerator-runtime/runtime';
+import { useTable, useSortBy, useGlobalFilter, useAsyncDebounce, usePagination } from 'react-table';
+import 'regenerator-runtime/runtime';
 
-import { ChevronDoubleLeftIcon, ChevronLeftIcon, ChevronRightIcon, ChevronDoubleRightIcon } from '@heroicons/react/24/solid'
+import { ChevronDoubleLeftIcon, ChevronLeftIcon, ChevronRightIcon, ChevronDoubleRightIcon } from '@heroicons/react/24/solid';
 
-import { Button, PageButton } from './Button'
+import { Button, PageButton } from './Button';
 
 
 function GlobalFilter({
@@ -122,22 +122,21 @@ function Table({ columns, data }) {
           ))}
         </select>
       </div> */}
-      <div className="flex gap-x-2">
-        <GlobalFilter
-          preGlobalFilteredRows={preGlobalFilteredRows}
-          globalFilter={state.globalFilter}
-          setGlobalFilter={setGlobalFilter}
-        />
-        {headerGroups.map((headerGroup) =>
-          <tr {...headerGroup.getHeaderGroupProps()}>
-            {headerGroup.headers.map((column) => (
-              <th {...column.getHeaderProps()}>{column.render("Header")}</th>
-            ))}
-          </tr>
-        )}
-      </div>
+
+      <GlobalFilter
+        preGlobalFilteredRows={preGlobalFilteredRows}
+        globalFilter={state.globalFilter}
+        setGlobalFilter={setGlobalFilter}
+      />
+      {headerGroups.map((headerGroup) =>
+        <tr {...headerGroup.getHeaderGroupProps()}>
+          {headerGroup.headers.map((column) => (
+            <th {...column.getHeaderProps()}>{column.render("Header")}</th>
+          ))}
+        </tr>
+      )}
+
       {/* table */}
-      <div className="mt-2 flex flex-col">
         <table {...getTableProps()} border="1">
         <thead>
           {headerGroups.map((headerGroup) => (
@@ -161,7 +160,7 @@ function Table({ columns, data }) {
           })}
         </tbody>
       </table>
-      </div>
+
       {/* Pagination */}
       <div className="py-3 flex items-center justify-between">
         <div className="flex-1 flex justify-between sm:hidden">
@@ -186,7 +185,7 @@ function Table({ columns, data }) {
               ))}
             </select>
           </div>
-          <div>
+          {/* <div>
             <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
               <PageButton
                 className="rounded-l-md"
@@ -219,7 +218,7 @@ function Table({ columns, data }) {
                 <ChevronDoubleRightIcon className="h-5 w-5" aria-hidden="true" />
               </PageButton>
             </nav>
-          </div>
+          </div> */}
         </div>
       </div>
     </>
