@@ -7,6 +7,8 @@ import { Db, ObjectId } from 'mongodb';
 
 const PORT = process.env.PORT || 3000;
 let database: Db;
+const JWT_SECRET = process.env.JWT_SECRET || 'jwt_secret_key';
+
 
 // -------- START SERVER --------
 app.listen(PORT, async () => {
@@ -94,53 +96,3 @@ app.get("/api/groups/:userId", (req: Request, res: Response) => {
 
 // Create group
 app.post("/api/groups", (req: Request, res: Response) => { });
-
-
-
-
-
-// Assuming 'database' is passed in or available in scope
-const router = express.Router();
-const JWT_SECRET = process.env.JWT_SECRET || 'your_super_secret_key';
-
-// --- REGISTER ENDPOINT ---
-router.post('/register', async (req: Request, res: Response) => {
-
-});
-
-// --- LOGIN ENDPOINT ---
-router.post('/login', async (req: Request, res: Response) => {
-  try {
-    const { email, password } = req.body;
-
-    const usersCollection = database.collection('users');
-
-    // 1. Find user by email
-    const user = await usersCollection.findOne({ email });
-    if (!user) {
-      return res.status(401).json({ message: "Invalid credentials" });
-    }
-
-    // 2. Compare passwords
-    const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
-    if (!isPasswordValid) {
-      return res.status(401).json({ message: "Invalid credentials" });
-    }
-
-    // 3. Generate JWT
-    const token = jwt.sign(
-      { userId: user._id, email: user.email },
-      JWT_SECRET,
-      { expiresIn: '24h' }
-    );
-
-    res.status(200).json({
-      token,
-      user: { id: user._id, email: user.email }
-    });
-  } catch (error) {
-    res.status(500).json({ message: "Error logging in", error });
-  }
-});
-
-export default router;
