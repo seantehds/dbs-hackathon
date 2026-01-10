@@ -7,20 +7,24 @@ const PORT = process.env.PORT || 3000;
 
 // test
 app.get("/api/test", (_req, res: Response) => {
-  console.log("test called")
+  console.log("test called");
   res.json({ api: "works hooray" });
 });
 
+// USERS
+
 // EXPENSES
-app.get('/api/expenses/:userId', (req: Request, res: Response) => {
-  console.log("expenses endpoint called")
-})
+app.get("/api/expenses/:userId", (req: Request, res: Response) => {
+  console.log("expenses endpoint called");
+});
 
-
-// Landing Page
-app.get("/api/groups/:userID", (_req, res: Response) => {
+// GROUPS
+app.get("/api/groups/:userId", (req: Request, res: Response) => {
+  console.log("login successful");
   res.json({ groups: [] });
-})
+});
+
+app.post("/api/groups", (req: Request, res: Response) => {});
 
 // -------- START SERVER --------
 app.listen(PORT, () => {
