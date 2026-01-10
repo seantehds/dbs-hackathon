@@ -21,3 +21,6 @@ app.listen(PORT, async () => {
   console.log(process.env.ATLAS_URI)
   await mongoose.connect(process.env.ATLAS_URI as string);
 });
+
+
+// -------- API ROUTES --------
