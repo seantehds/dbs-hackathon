@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import app from "./app";
 import { Response } from "express";
 import dotenv from "dotenv";
@@ -18,8 +17,6 @@ app.get("/api/test", (_req, res: Response) => {
 
 app.listen(PORT, async () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
-  console.log(process.env.ATLAS_URI)
-  await mongoose.connect(process.env.ATLAS_URI as string);
 });
 
 
