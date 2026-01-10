@@ -14,18 +14,6 @@ app.get("/api/test", (_req, res: Response) => {
   res.json({ api: "works hooray" });
 });    
 
-
-// get aggregated balanced data across all user groups with total amount
-// settled and amount pending action
-app.get("/api/groups/:userID", (_req, res) => {
-  try {
-
-  } catch (error) {
-    res.status(400).json({ message: error} );
-  }
-})
-
-
 // -------- START SERVER --------
 
 app.listen(PORT, async () => {
