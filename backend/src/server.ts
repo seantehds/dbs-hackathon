@@ -74,7 +74,7 @@ app.post("/api/login", async (req: Request, res: Response) => {
 app.post("/api/register", async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
-    console.log(req.body)
+    console.log(req.body);
 
     if (!email || !password) {
       return res
@@ -110,19 +110,39 @@ app.post("/api/register", async (req: Request, res: Response) => {
 });
 
 // EXPENSES
+// Read
 app.get("/api/expenses/:userId", async (req: Request, res: Response) => {
   const userId = req.params.userId;
   const expensesCollection = database.collection("expenses");
   const expensesDocuments = await expensesCollection
     .find({ $or: [{ paidBy: userId }, { paidTo: userId }] })
     .toArray();
-  res.json({documents: expensesDocuments});
+  res.json({ documents: expensesDocuments });
+});
+
+// Create
+app.post("/api/expenses", async (req: Request, res: Response) => {
+  const paidBy = req.query.paidBy;
+  const paidTo = req.query.paidTo;
+  const expenseName = req.query.expenseName;
+  const amount = req.query.amount;
+  const groupId = req.query.groupId;
+  const expensesCollection = database.collection("expenses");
+  const response = await expensesCollection.insertOne({
+    expenseName: expenseName,
+    amount: amount,
+    paidBy: paidBy,
+    paidTo: paidTo,
+    groupId: groupId,
+    status: "Not Paid",
+  });
+  res.json({ insertedId: response.insertedId });
 });
 
 // GROUPS get user's groups based on userId
 app.get("/api/groups/:userId", async (req: Request, res: Response) => {
   console.log("get user groups");
-  await getDashboard(req, res, client)
+  await getDashboard(req, res, client);
 });
 
 // Create group
